@@ -1,0 +1,7 @@
+# No third-party dependencies required.
+# The toolkit runs on the Python 3.8+ standard library only.
+#
+# If you want to run static type-checking or linting (optional):
+#   pip install mypy ruff
+#
+# Python >= 3.8 required.

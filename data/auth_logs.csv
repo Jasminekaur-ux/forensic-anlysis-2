@@ -1,0 +1,28 @@
+timestamp,source,user,ip_address,event_type,result,details
+2024-03-15 08:00:01,auth,alice,192.168.1.101,login,failed,Invalid password
+2024-03-15 08:00:14,auth,alice,192.168.1.101,login,failed,Invalid password
+2024-03-15 08:00:28,auth,alice,192.168.1.101,login,failed,Invalid password
+2024-03-15 08:00:41,auth,alice,192.168.1.101,login,failed,Invalid password
+2024-03-15 08:00:55,auth,alice,192.168.1.101,login,failed,Invalid password
+2024-03-15 08:01:10,auth,alice,192.168.1.101,login,success,Authenticated successfully
+2024-03-15 08:02:30,auth,alice,192.168.1.101,file_access,success,Read /etc/passwd
+2024-03-15 08:03:15,auth,alice,192.168.1.101,file_access,suspicious,Read /etc/shadow
+2024-03-15 08:03:50,auth,alice,192.168.1.101,file_access,suspicious,Read /var/log/secure
+2024-03-15 08:05:00,auth,alice,192.168.1.101,network_connection,suspicious,Outbound connection to 10.0.0.99:4444
+2024-03-15 09:10:00,auth,bob,10.20.30.40,login,failed,Invalid password
+2024-03-15 09:10:22,auth,bob,10.20.30.40,login,failed,Invalid password
+2024-03-15 09:10:45,auth,bob,10.20.30.40,login,success,Authenticated successfully
+2024-03-15 09:11:30,auth,bob,10.20.30.40,file_access,success,Read /home/bob/notes.txt
+2024-03-15 10:00:00,auth,root,203.0.113.55,login,failed,Invalid password
+2024-03-15 10:00:05,auth,root,203.0.113.55,login,failed,Invalid password
+2024-03-15 10:00:10,auth,root,203.0.113.55,login,failed,Invalid password
+2024-03-15 10:00:15,auth,root,203.0.113.55,login,failed,Invalid password
+2024-03-15 10:00:20,auth,root,203.0.113.55,login,failed,Invalid password
+2024-03-15 10:00:25,auth,root,203.0.113.55,login,failed,Invalid password
+2024-03-15 10:00:30,auth,root,203.0.113.55,login,failed,Invalid password
+2024-03-15 10:00:35,auth,root,203.0.113.55,login,failed,Account locked after too many failures
+2024-03-15 10:30:00,auth,charlie,192.168.1.200,login,success,Authenticated successfully
+2024-03-15 10:31:00,auth,charlie,192.168.1.200,file_access,success,Read /home/charlie/report.docx
+2024-03-15 11:45:00,auth,dave,172.16.0.5,login,success,Authenticated successfully
+2024-03-15 11:46:00,auth,dave,172.16.0.5,login,success,Re-authenticated successfully
+2024-03-15 11:47:00,auth,dave,172.16.0.5,file_access,success,Read /opt/app/config.yaml
