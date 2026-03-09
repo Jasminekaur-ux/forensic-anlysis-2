@@ -2,12 +2,16 @@
 reporter.py — Output and report generation for the Forensic Analysis Toolkit.
 
 Supports two output modes:
-  1. Console  → Richly formatted text printed to stdout (default mode)
-  2. Markdown → A structured .md report saved to the reports/ directory
+  1. Console  -> Richly formatted text printed to stdout (default mode)
+  2. Markdown -> A structured .md report saved to the reports/ directory
 
 Forensic Phases Covered:
-  Reporting → Present timeline, findings, and narrative in human-readable form
+  Reporting -> Present timeline, findings, and narrative in human-readable form
 """
+import sys
+# Ensure UTF-8 output on all platforms (handles Windows cp1252 terminals)
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 from __future__ import annotations
 
@@ -31,11 +35,11 @@ def _divider(char: str = "─", width: int = 72) -> str:
 
 
 def _severity_icon(severity: str) -> str:
-    return {"CRITICAL": "🔴", "HIGH": "🟠", "MEDIUM": "🟡", "LOW": "🟢"}.get(severity, "⚪")
+    return {"CRITICAL": "[!!!]", "HIGH": "[!! ]", "MEDIUM": "[!  ]", "LOW": "[   ]"}.get(severity, "[ ? ]")
 
 
 def _result_icon(result: str) -> str:
-    return {"success": "✅", "failed": "❌", "suspicious": "⚠️", "unknown": "❓"}.get(result, "  ")
+    return {"success": "[OK]", "failed": "[--]", "suspicious": "[??]", "unknown": "[  ]"}.get(result, "    ")
 
 
 # ── Console Reporter ──────────────────────────────────────────────────────────
@@ -47,15 +51,15 @@ class ConsoleReporter:
         self.width = width
 
     def _header(self, title: str) -> None:
-        print(_divider("═", self.width))
+        print(_divider("=", self.width))
         print(f"  {title}")
-        print(_divider("═", self.width))
+        print(_divider("=", self.width))
 
     def _section(self, title: str) -> None:
         print()
-        print(_divider("─", self.width))
+        print(_divider("-", self.width))
         print(f"  {title}")
-        print(_divider("─", self.width))
+        print(_divider("-", self.width))
 
     def print_banner(self) -> None:
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -78,7 +82,7 @@ class ConsoleReporter:
         if timeline.findings:
             print()
             for f in timeline.findings:
-                print(f"  ℹ️  {f}")
+                print(f"  [i]  {f}")
 
     def print_bruteforce(self, incidents: list[BruteForceIncident]) -> None:
         self._section(f"BRUTE-FORCE ANALYSIS  ({len(incidents)} incident(s))")
@@ -113,11 +117,11 @@ class ConsoleReporter:
     def print_scan_alerts(self, alerts: list[ForensicEvent]) -> None:
         self._section(f"SCAN / ATTACK ALERTS  ({len(alerts)} event(s))")
         if not alerts:
-            print("  ✅ No scanner/attack alerts detected.")
+            print("  [OK] No scanner/attack alerts detected.")
             return
         for alert in alerts:
             print(
-                f"  ⚠️  {alert.timestamp:%H:%M:%S}  ip={alert.ip_address:<18}  "
+                f"  [??]  {alert.timestamp:%H:%M:%S}  ip={alert.ip_address:<18}  "
                 f"{alert.details[:60]}"
             )
 
@@ -128,9 +132,9 @@ class ConsoleReporter:
 
     def print_footer(self) -> None:
         print()
-        print(_divider("═", self.width))
+        print(_divider("=", self.width))
         print("  END OF REPORT")
-        print(_divider("═", self.width))
+        print(_divider("=", self.width))
 
     def render(
         self,
@@ -228,7 +232,7 @@ class MarkdownReporter:
         # ── Brute-force ───────────────────────────────────────────────────────
         lines += [f"## Brute-Force Incidents ({len(bf_incidents)})", ""]
         if not bf_incidents:
-            lines += ["> ✅ No brute-force patterns detected.", ""]
+            lines += ["> No brute-force patterns detected.", ""]
         else:
             for inc in bf_incidents:
                 icon = _severity_icon(inc.severity)
@@ -245,13 +249,13 @@ class MarkdownReporter:
         # ── File correlations ──────────────────────────────────────────────────
         lines += [f"## Suspicious File Access ({len(file_correlations)} correlation(s))", ""]
         if not file_correlations:
-            lines += ["> ✅ No suspicious post-login file access detected.", ""]
+            lines += ["> No suspicious post-login file access detected.", ""]
         else:
             for corr in file_correlations:
                 login = corr["login_event"]
                 files = corr["file_events"]
                 lines += [
-                    f"### ⚠️ user=`{login.user}`  ip=`{login.ip_address}`",
+                    f"### [??] user=`{login.user}`  ip=`{login.ip_address}`",
                     "",
                     f"Login at `{login.timestamp:%H:%M:%S}` ({login.result}), "
                     f"followed by **{len(files)}** file access event(s):",
@@ -264,7 +268,7 @@ class MarkdownReporter:
         # ── Scan alerts ────────────────────────────────────────────────────────
         lines += [f"## Scan / Attack Alerts ({len(scan_alerts)} event(s))", ""]
         if not scan_alerts:
-            lines += ["> ✅ No scanner/attack alerts detected.", ""]
+            lines += ["> No scanner/attack alerts detected.", ""]
         else:
             lines += [
                 "| Timestamp | IP | Details |",

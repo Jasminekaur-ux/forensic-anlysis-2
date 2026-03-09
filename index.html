@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Forensic Analysis Lab 2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A digital forensics lab for examining evidence, recording findings, and generating investigation reports." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- Animated background particles -->
+    <div class="bg-particles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <header>
+      <div class="header-inner">
+        <div class="badge">LAB 2</div>
+        <h1>Forensic Analysis Lab</h1>
+        <p class="subtitle">
+          Examine digital evidence, record findings, and generate a concise investigation report.
+        </p>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- Case Overview -->
+      <section class="card" id="section-overview">
+        <div class="card-header">
+          <span class="card-icon">🔍</span>
+          <h2>Case Overview</h2>
+        </div>
+        <p>
+          In this lab, you are given a small set of digital evidence files. Your task is to inspect them,
+          extract key artefacts — timestamps, file metadata, hidden content, suspicious strings, etc. —
+          and note your observations below.
+        </p>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Case ID</span>
+            <span class="info-value mono" id="caseId">FA2-2024-001</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Started</span>
+            <span class="info-value mono" id="sessionStart">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status</span>
+            <span class="info-value status-badge" id="caseStatus">In Progress</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Evidence Notes -->
+      <section class="card" id="section-notes">
+        <div class="card-header">
+          <span class="card-icon">📝</span>
+          <h2>Evidence Notes</h2>
+        </div>
+        <div class="notes-container">
+          <textarea id="notes" placeholder="Write your observations here…&#10;&#10;e.g.&#10;• File: suspicious.exe — creation timestamp 2024-03-01 03:47 UTC&#10;• MD5: d8e8fca2dc0f896fd7cb4cb0031ba249&#10;• Found encoded string in resource section…"></textarea>
+          <div class="notes-meta">
+            <span id="charCount">0 characters</span>
+            <span id="saveStatus" class="save-status"></span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button id="saveNotes" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save Notes
+          </button>
+          <button id="clearNotes" class="btn btn-ghost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Clear
+          </button>
+        </div>
+        <p class="hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Notes are stored locally in your browser (localStorage).
+        </p>
+      </section>
+
+      <!-- Quick Checklist -->
+      <section class="card" id="section-checklist">
+        <div class="card-header">
+          <span class="card-icon">✅</span>
+          <h2>Quick Checklist</h2>
+        </div>
+        <ul class="checklist" id="checklistEl">
+          <li>
+            <label class="check-label">
+              <input type="checkbox" class="chk" data-id="metadata" id="chk-metadata" />
+              <span class="checkmark"></span>
+              <span class="check-text">
+                <strong>File metadata examined</strong>
+                <small>Review file size, type, created/modified dates</small>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" class="chk" data-id="hashes" id="chk-hashes" />
+              <span class="checkmark"></span>
+              <span class="check-text">
+                <strong>Hash values calculated</strong>
+                <small>Compute MD5, SHA-1, or SHA-256 checksums</small>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" class="chk" data-id="timestamps" id="chk-timestamps" />
+              <span class="checkmark"></span>
+              <span class="check-text">
+                <strong>Timestamps reviewed</strong>
+                <small>Check MACB times and timezone discrepancies</small>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" class="chk" data-id="strings" id="chk-strings" />
+              <span class="checkmark"></span>
+              <span class="check-text">
+                <strong>Suspicious strings searched</strong>
+                <small>Scan for URLs, credentials, encoded payloads</small>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" class="chk" data-id="report" id="chk-report" />
+              <span class="checkmark"></span>
+              <span class="check-text">
+                <strong>Report summary drafted</strong>
+                <small>Summarise findings and chain of custody</small>
+              </span>
+            </label>
+          </li>
+        </ul>
+
+        <div class="progress-section">
+          <p id="progressText" class="progress-text">
+            Progress: <strong id="progressCount">0</strong> / 5 tasks completed
+          </p>
+          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="5" aria-label="Checklist progress">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+          <p id="completionMsg" class="completion-msg" hidden>
+            🎉 All tasks complete! You can now generate your report.
+          </p>
+        </div>
+      </section>
+
+      <!-- Report Generator -->
+      <section class="card" id="section-report">
+        <div class="card-header">
+          <span class="card-icon">📄</span>
+          <h2>Generate Report</h2>
+        </div>
+        <p>Click below to compile your evidence notes and checklist status into a plain-text incident report.</p>
+        <button id="generateReport" class="btn btn-accent">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Generate Report
+        </button>
+        <pre id="reportOutput" class="report-output" hidden></pre>
+        <button id="copyReport" class="btn btn-ghost mt-sm" hidden>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy to Clipboard
+        </button>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>Digital Forensics Practice &bull; Lab 2 &bull; <span id="footerYear"></span></p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
